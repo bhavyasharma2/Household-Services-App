@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Requests</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+    <a href="{{ url_for('admin_home') }}" class="btn btn-primary" style="position: absolute; top: 10px; right: 10px;">Back to Dashboard</a>
+    <h1>New Service Professional Registration Requests</h1>
+    <table class="table table-bordered">
+        {% if registration_requests %}
+        <tr>
+            <th>Request ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Pincode</th>
+            <th>Document</th>
+            <th>Action</th>
+        </tr>
+        {% for request in registration_requests %}
+            <tr>
+                <td>{{ request['request_id'] }}</td>
+                <td>{{ request['full_name'] }}</td>
+                <td>{{ request['email'] }}</td>
+                <td>{{ request['pin_code'] }}</td>
+                <td><a href="{{ url_for('view_document', document_path=request['documents_path']) }}" target="_blank" class="btn btn-outline-secondary btn-sm">Open Document</a></td>
+                <td>
+                    <form action="{{ url_for('approve_registration', request_id=request['request_id']) }}" method="POST">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                    <form action="{{ url_for('reject_registration', request_id=request['request_id']) }}" method="POST">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No new registration requests found.</p>
+{% endif %}
+</body>
+</html>

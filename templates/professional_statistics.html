@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin-top: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+        }
+        .chart-container {
+            max-width: 100%;
+            margin-bottom: 30px;
+        }
+        .chart {
+            height: 250px !important;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .top-right-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .row-cols-1.row-cols-md-2 {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-right-button">
+        <a href="{{ url_for('professional_home') }}" class="btn btn-custom">Back to Dashboard</a>
+    </div>
+
+    <div class="container">
+        <h1 class="text-center mb-4">Professional Statistics</h1>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Your Rating</h2>
+                        <p>Your current rating: <strong>{{ professional_rating }}</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center">Service Requests by Status</h3>
+                        <div class="chart-container">
+                            <canvas id="serviceRequestsStatusChart" class="chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const serviceRequestsStatusData = JSON.parse('{{ service_requests_by_status | tojson | safe }}');
+        const statusLabels = serviceRequestsStatusData.map(item => item.status);
+        const statusCounts = serviceRequestsStatusData.map(item => item.count);
+
+        const ctx = document.getElementById('serviceRequestsStatusChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    label: 'Service Requests by Status',
+                    data: statusCounts,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Service Requests by Status' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+

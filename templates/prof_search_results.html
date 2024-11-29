@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+    <h1 class="text-center mb-4">Search Results</h1>
+    <a href="{{ url_for('professional_home') }}" class="btn btn-primary mb-4">Back to Dashboard</a>
+    {% if results %}
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Request ID</th>
+                <th>Customer Name</th>
+                <th>Requested Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ result['id'] }}</td>
+                <td>{{ result['customer_name'] }}</td>
+                <td>{{ result['requested_date'] }}</td>
+                <td>{{ result['status'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No matching service requests found.</p>
+    {% endif %}
+</body>
+</html>

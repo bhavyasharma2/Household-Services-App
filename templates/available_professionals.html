@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Professionals</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="{{ url_for('customer_home') }}" class="btn btn-primary" style="position: absolute; top: 10px; right: 10px;">Back to Dashboard</a>
+        <h1 class="text-center">
+            {% if no_professionals %}
+                Sorry, no professionals are currently available in your area.
+            {% else %}
+                Following are the service professionals available in your area:
+            {% endif %}
+        </h1>
+
+        {% if not no_professionals %}
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Mobile Number</th>
+                                <th>Experience</th>
+                                <th>Rating</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for professional in professionals %}
+                                <tr>
+                                    <td>{{ professional.id }}</td> 
+                                    <td>{{ professional.full_name }}</td> 
+                                    <td>{{ professional.mobile_number }}</td> 
+                                    <td>{{ professional.experience }}</td> 
+                                    <td>{{ professional.rating }}</td> 
+                                    <td>
+                                        <a href="{{ url_for('book_service', service_id=service.id, professional_id=professional.id) }}" class="btn btn-success">Book</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+
+
+

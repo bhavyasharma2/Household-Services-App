@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .input-group input {
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        .input-group .btn {
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        .list-group-item {
+            font-size: 1.1rem;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .list-group-item:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn {
+            width: 180px;
+            font-size: 1.1rem;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .list-group {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-container .btn {
+            width: auto;
+        }
+    </style>
+    <script>
+        function searchPage() {
+            var query = document.getElementById('searchInput').value.toLowerCase();
+            if (query === 'customer details') {
+                window.location.href = "{{ url_for('customer_details') }}";
+            } else if (query === 'service professional details') {
+                window.location.href = "{{ url_for('professional_details') }}";
+            } else if (query === 'services') {
+                window.location.href = "{{ url_for('service_details') }}";
+            } else if (query === 'service requests') {
+                window.location.href = "{{ url_for('admin_service_requests') }}";
+            } else if (query === 'summary') {
+                window.location.href = "{{ url_for('admin_statistics') }}";
+            } else {
+                window.location.href = "{{ url_for('search_professional_by_name') }}?query=" + encodeURIComponent(query);
+            }
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container py-4">
+        <h1 class="text-center">Welcome To Your Dashboard, Admin!</h1>
+
+        
+        <form class="input-group mb-4" onsubmit="return searchPage();">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="searchButton">
+        </form>
+
+        <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary" id="searchButton" onclick="searchPage()">Search</button>
+        </div>
+
+        
+        <div class="list-group mb-4">
+            <a href="{{ url_for('customer_details') }}" class="list-group-item list-group-item-action">Customer Details</a>
+            <a href="{{ url_for('professional_details') }}" class="list-group-item list-group-item-action">Service Professional Details</a>
+            <a href="{{ url_for('service_details') }}" class="list-group-item list-group-item-action">Services</a>
+            <a href="{{ url_for('admin_service_requests') }}" class="list-group-item list-group-item-action">Service Requests</a>
+            <a href="{{ url_for('new_registration_requests') }}" class="list-group-item list-group-item-action">New Service Professional Registration Requests</a>
+            <a href="{{ url_for('admin_statistics') }}" class="list-group-item list-group-item-action">Summary</a>
+        </div>
+
+        
+        <div class="btn-container">
+            <a href="{{ url_for('admin_edit_profile') }}" class="btn btn-secondary">Edit Profile</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+    <a href="{{ url_for('admin_home') }}" class="btn btn-primary" style="position: absolute; top: 10px; right: 10px;">Back to Dashboard</a>
+    <h1 class="text-center mb-4">Customer Details</h1>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Email ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Pincode</th>
+                <th>Service Requests</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer['id'] }}</td>
+                <td>{{ customer['email'] }}</td>
+                <td>{{ customer['full_name'] }}</td>
+                <td>{{ customer['address'] }}</td>
+                <td>{{ customer['pin_code'] }}</td>
+                <td>{{ customer['service_request_count'] }}</td>
+                <td>
+                    {% if customer['is_blocked'] == 1 %}
+                        <a href="{{ url_for('unblock_customer', user_id=customer['id']) }}" class="btn btn-success btn-sm">Unblock</a>
+                    {% else %}
+                        <a href="{{ url_for('block_customer', user_id=customer['id']) }}" class="btn btn-danger btn-sm">Block</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

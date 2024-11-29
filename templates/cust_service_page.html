@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Services</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="{{ url_for('customer_home') }}" class="btn btn-primary" style="position: absolute; top: 10px; right: 10px;">Back to Dashboard</a>
+        <h1 class="text-center mb-4">Available Services</h1>
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Service Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Time Required</th>
+                    <th>Service Type</th>  
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                    <tr>
+                        <td>{{ service['id'] }}</td>
+                        <td>{{ service['name'] }}</td>
+                        <td>{{ service['description'] }}</td>
+                        <td>{{ service['price'] }}</td>
+                        <td>{{ service['time_required'] }}</td>
+                        <td>
+                            
+                            <select name="service_type" id="service_type_{{ service['id'] }}">
+                                {% for type in service['types'] %}
+                                    <option value="{{ type['id'] }}">{{ type['type_name'] }}</option>  
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-primary book-professional" data-service-id="{{ service['id'] }}">Book A Professional</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.querySelectorAll('.book-professional').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+            var row = button.closest('tr');
+            var serviceTypeId = row.querySelector('select').value;  
+            var serviceId = button.getAttribute('data-service-id');  
+        
+            var url = "{{ url_for('available_professionals', service_id=0, service_type_id=0) }}";  
+            url = url.replace('0', serviceId);  
+            url = url.replace('0', serviceTypeId);  
+        
+            window.location.href = url;
+        });
+    });
+    </script>
+</body>
+</html>
+
+

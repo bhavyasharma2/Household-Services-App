@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Statistics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .chart-container {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .row-cols-1.row-cols-md-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        .top-right-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .card-body h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-right-button">
+        <a href="{{ url_for('admin_home') }}" class="btn btn-custom">Back to Dashboard</a>
+    </div>
+
+    <div class="container">
+        <h1 class="text-center mb-4">Statistics for Admin</h1>
+
+        <div class="row row-cols-1 row-cols-md-2">
+            <div class="col">
+                <div class="chart-container">
+                    <h3 class="text-center">Professional Ratings Distribution</h3>
+                    <canvas id="professionalRatingsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="chart-container">
+                    <h3 class="text-center">Service Requests by Service Name</h3>
+                    <canvas id="serviceRequestsByNameChart"></canvas>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="chart-container">
+                    <h3 class="text-center">Customers by Pincode</h3>
+                    <canvas id="customersByPincodeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="chart-container">
+                    <h3 class="text-center">Service Requests by Status</h3>
+                    <canvas id="serviceRequestsByStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const professionalRatingsData = JSON.parse('{{ professional_ratings | tojson | safe }}');
+        const serviceRequestsByNameData = JSON.parse('{{ service_requests_by_name | tojson | safe }}');
+        const customersByPincodeData = JSON.parse('{{ customers_by_pincode | tojson | safe }}');
+        const serviceRequestsByStatusData = JSON.parse('{{ service_requests_by_status | tojson | safe }}');
+
+        const ratingsLabels = professionalRatingsData.map(item => item.rating_group);
+        const ratingsValues = professionalRatingsData.map(item => item.count);
+        const ctx1 = document.getElementById('professionalRatingsChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ratingsLabels,
+                datasets: [{
+                    label: 'Number of Professionals',
+                    data: ratingsValues,
+                    backgroundColor: ['#4CAF50', '#FFA726', '#EF5350']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Professional Ratings Distribution' }
+                }
+            }
+        });
+
+        const serviceNames = serviceRequestsByNameData.map(item => item.service_name);
+        const serviceRequestCounts = serviceRequestsByNameData.map(item => item.request_count);
+        const ctx2 = document.getElementById('serviceRequestsByNameChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: serviceNames,
+                datasets: [{
+                    label: 'Service Requests',
+                    data: serviceRequestCounts,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Service Requests by Service Name' }
+                }
+            }
+        });
+
+        const pincodes = customersByPincodeData.map(item => item.pincode);
+        const customerCounts = customersByPincodeData.map(item => item.customer_count);
+        const ctx3 = document.getElementById('customersByPincodeChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: pincodes,
+                datasets: [{
+                    label: 'Number of Customers',
+                    data: customerCounts,
+                    backgroundColor: '#42A5F5'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Customers by Pincode' }
+                }
+            }
+        });
+
+        const statusLabels = serviceRequestsByStatusData.map(item => item.status);
+        const statusCounts = serviceRequestsByStatusData.map(item => item.request_count);
+        const ctx4 = document.getElementById('serviceRequestsByStatusChart').getContext('2d');
+        new Chart(ctx4, {
+            type: 'doughnut',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    label: 'Service Requests',
+                    data: statusCounts,
+                    backgroundColor: ['#FF9F40', '#4BC0C0', '#FF6384', '#36A2EB']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Service Requests by Status' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+

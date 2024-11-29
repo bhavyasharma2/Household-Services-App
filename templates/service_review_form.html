@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Review</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h2>Service Review</h2>
+    <form action="{{ url_for('submit_review', request_id=service_request['service_request_id']) }}" method="post">
+        <div class="mb-3">
+            <label for="request_id" class="form-label">Service Request ID</label>
+            <input type="text" class="form-control" id="request_id" value="{{ service_request['service_request_id'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="service_name" class="form-label">Service Name</label>
+            <input type="text" class="form-control" id="service_name" value="{{ service_request['service_name'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="service_type" class="form-label">Service Type Name</label>
+            <input type="text" class="form-control" id="service_type" value="{{ service_request['service_type_name'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="requested_date" class="form-label">Requested Date</label>
+            <input type="text" class="form-control" id="requested_date" value="{{ service_request['requested_date'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="completion_date" class="form-label">Completion Date</label>
+            <input type="text" class="form-control" id="completion_date" value="{{ service_request['completion_date'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="professional_id" class="form-label">Professional ID</label>
+            <input type="text" class="form-control" id="professional_id" value="{{ service_request['professional_id'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="professional_name" class="form-label">Professional Name</label>
+            <input type="text" class="form-control" id="professional_name" value="{{ service_request['professional_name'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="professional_contact" class="form-label">Professional Contact Number</label>
+            <input type="text" class="form-control" id="professional_contact" value="{{ service_request['professional_contact'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="service_rating" class="form-label">Service Rating</label>
+            <input type="number" class="form-control" id="service_rating" name="service_rating" required min="1" max="5">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+</div>
+
+</body>
+</html>
+
