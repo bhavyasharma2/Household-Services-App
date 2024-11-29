@@ -1,5 +1,5 @@
 # EaseWork 
-###- A Household Services Application
+### A Household Services Application
 
 A comprehensive web-based platform designed to seamlessly connect customers with skilled service professionals for various household needs. The application features role-specific functionalities tailored for Admins, Service Professionals, and Customers, enabling efficient management of service requests, assignments, and reviews while ensuring a user-friendly experience for all participants.
 
